@@ -1,0 +1,44 @@
+<html>
+<head>
+<script>
+function openPopunder(){
+    // Open a new blank tab
+    blank_tab = open("about:blank", "_blank");
+    blank_tab.document.write("<html><head></head><body></body></html>");
+    // addEventListener for mouse up to compliment the mouse down that triggered this function
+    blank_tab.addEventListener("mouseup", function i() {
+        // removeEventListener for mouseup so it only triggers once
+        blank_tab.removeEventListener("mouseup", i)
+        // Open the popunder window
+        new_window = open("about:blank", "", "width=1920,height=1080,status=1,scrollbars=1,left=0,location=0,top=0,resizable=1,toolbar=0,menubar=0");
+        // Hide the popunder window in the bottom right of the screen
+        new_window.resizeTo(1,0);
+        new_window.moveTo(9e5,9e5);
+        // addEventListener for when the focus switches to the blank tab
+        blank_tab.addEventListener("focus", function() {
+            // Close the blank tab
+            blank_tab.document.body.innerHTML = "";
+            blank_tab.close();
+            // Move the popunder to fullscreen at target url
+            new_window.moveTo(0,0);
+            new_window.resizeTo(1920, 1080);
+            new_window.location.replace("http://127.0.0.1/spam.html");
+        });
+        // Tries to download a pdf to bring the focus from the popunder back to the blank tab which then closes it from the focus event
+        blank_tab.document.body.innerHTML = '\
+            <div style="visibility:hidden; width:0px; height:0px; position:absolute; top:100%; left:0; pointer-events:none; overflow:hidden;">\
+                <object data="data:application/pdf;base64, \
+                    BASE64 STRING REDACTED\
+                ">\
+                </object>\
+            </div>';
+    });
+    // Adds a timer to make sure it triggers
+    i = setInterval(function() { clearInterval(i)}, 20);    
+}
+</script>
+</head>
+<body>
+    <h1 onmousedown="openPopunder()">Test Popunder</h1>
+</body>
+</html>
