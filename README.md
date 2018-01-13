@@ -16,35 +16,35 @@ From there it was just the matter of setting some breakpoints in those functions
 ## Overview
 This popunder works by having an onclick event that will create a new tab. 
 
-'''HTTP
+```HTTP
 <h1 onmousedown="openPopunder()">Test Popunder</h1>
-'''
+```
 
 That new tab has a "mouseup" event listener that creates a new window, hides it by shrinking and moving it off screen, and adds a focus event listener to the tab.
 
-'''javascript
+```javascript
 blank_tab.addEventListener("mouseup", function i() 
 ...
     new_window.resizeTo(1,0);
     new_window.moveTo(9e5,9e5);
     blank_tab.addEventListener("focus", function() 
-'''
+```
 
 That new window that was created should now be the focus of the web browser. However, the tab that was opened tries to download a pdf which causes an alert box and brings that tab back to the front.
 
-'''javascript
+```javascript
 blank_tab.document.body.innerHTML = '\
     ...
         <object data="data:application/pdf;base64, ...">
-'''
+```
 
 With the focus back on the tab the event from before triggers. This event causes the tab to close and the hidden window to resize in the background.
 
-'''javascript
+```javascript
 blank_tab.addEventListener("focus", function()  
     ...
     blank_tab.close();
     new_window.moveTo(0,0);
     new_window.resizeTo(1920, 1080);
     ...
-'''
+```
